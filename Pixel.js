@@ -7,7 +7,6 @@ Pixel.prototype.gy = 0; // goal y
 Pixel.prototype.spdx = 1;
 Pixel.prototype.spdy = 1;
 Pixel.prototype.done = false;
-Pixel.prototype.occupied = false;
 Pixel.prototype.upd = function () {
 	var gy = this.gy,
 	y = this.y,
