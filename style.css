@@ -1,18 +1,17 @@
 html {
 	font-family: sans-serif;
-	text-shadow: rgba(0, 0, 0, 0.25) 0px 0px 1px;
-	font-size:small;
 }
-#page {
-	background-color:rgb(192,192,192);
-	padding:1px 10px 10px 10px;
-	border-radius:10px;
+body {
+	margin-top:20px;
 }
-#page td {
-	vertical-align: top;	
+
+.container .panel-body {
+	min-height:600px;
 }
-#accor {
-	font-size:small;	
+
+.container h1 {
+	font-family:Tahoma;
+	font-weight:bold;
 }
 .img {
 	transition: border-radius 0.5s ease-out 0s;
@@ -24,75 +23,4 @@ html {
 .drophover {
 	border:solid;
 	border-width:5px;
-}
-input[id=fileupload1],input[id=fileupload2],input[id=btn] {
-	display:none;
-}
-
-label[for=fileupload1],label[for=fileupload2],label[for=btn] {
-	width:200px;
-	background: #f6f6f6; /* Old browsers */
-	background: -moz-linear-gradient(top,  #f6f6f6 0%, #dedede 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f6f6f6), color-stop(100%,#dedede)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #f6f6f6 0%,#dedede 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #f6f6f6 0%,#dedede 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #f6f6f6 0%,#dedede 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #f6f6f6 0%,#dedede 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#dedede',GradientType=0 ); /* IE6-9 */
-	align-items: flex-start;
-	background-color: #DDD;
-	border-bottom-color: #DDD;
-	border-bottom-style: outset;
-	border-bottom-width: 1px;
-	border-collapse: separate;
-	border-image-outset: 0px;
-	border-image-repeat: stretch;
-	border-image-slice: 100%;
-	border-image-source: none;
-	border-image-width: 1;
-	border-left-color: #DDD;
-	border-left-style: outset;
-	border-left-width: 1px;
-	border-right-color: #DDD;
-	border-right-style: outset;
-	border-right-width: 1px;
-	border-top-color: #DDD;
-	border-top-style: outset;
-	border-top-width: 1px;
-	box-sizing: border-box;
-	color: #000;
-	cursor: default;
-	display: inline-block;
-	font-family: Arial;
-	letter-spacing: normal;
-	line-height: normal;
-	margin-bottom: 2px;
-	margin-left: 2px;
-	margin-right: 2px;
-	margin-top: 2px;
-	padding-bottom: 1px;
-	padding-left: 6px;
-	padding-right: 6px;
-	padding-top: 1px;
-	text-align: center;
-	text-indent: 0px;
-	text-shadow: none;
-	text-transform: none;
-	word-spacing: 0px;
-	writing-mode: lr-tb;
-	font-size: small;
-	
-}
-label[for=btn] {
-	width:400px;
-}
-label[for=fileupload1]:active,label[for=fileupload2]:active,label[for=btn]:active {
-	background: #dedede; /* Old browsers */
-	background: -moz-linear-gradient(top,  #dedede 0%, #f6f6f6 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #dedede 0%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #dedede 0%,#f6f6f6 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #dedede 0%,#f6f6f6 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #dedede 0%,#f6f6f6 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
 }
