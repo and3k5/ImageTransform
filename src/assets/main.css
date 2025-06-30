@@ -1,0 +1,21 @@
+@import "./base.css";
+
+.container .panel-body {
+    min-height: 600px;
+}
+
+.container h1 {
+    font-family: Tahoma;
+    font-weight: bold;
+}
+.img {
+    transition: border-radius 0.5s ease-out 0s;
+    width: 200px;
+    border-width: 0px;
+    box-sizing: border-box;
+    transition: border-width 0.25s ease-out 0s;
+}
+.drophover {
+    border: solid;
+    border-width: 5px;
+}
