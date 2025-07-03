@@ -4,6 +4,7 @@ import InputImage from "./components/InputImage.vue";
 import { type InputImageValue } from "./types/InputImageValue";
 import { algos } from "./core/algorithms";
 import { createConvertor } from "./core/it";
+import { useColorMode } from "./color-mode-store";
 
 const CONVERTOR = createConvertor();
 
@@ -18,6 +19,7 @@ const imageValue2 = ref<InputImageValue>({
 const canvasContainer = ref<HTMLDivElement>();
 
 const algorithms = ref<HTMLSelectElement>();
+const colorMode = useColorMode();
 
 onMounted(() => {
     algos.forEach(function (algo) {
@@ -51,10 +53,44 @@ function startConvert() {
 <template>
     <main class="container py-3">
         <div class="card row">
-            <header class="card-header">
-                <a href="/">
-                    <span class="fs-4">ImageTransform</span>
-                </a>
+            <header class="card-header d-flex justify-content-between px-3">
+                <div>
+                    <a href="/">
+                        <span class="fs-4">ImageTransform</span>
+                    </a>
+                </div>
+                <div class="btn-group" role="group" aria-label="Theme">
+                    <button
+                        type="button"
+                        :class="{
+                            'btn btn-outline-secondary': true,
+                            active: colorMode.userPreference === undefined,
+                        }"
+                        @click="colorMode.setDarkMode(undefined)"
+                    >
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <button
+                        type="button"
+                        :class="{
+                            'btn btn-outline-secondary': true,
+                            active: colorMode.userPreference === false,
+                        }"
+                        @click="colorMode.setDarkMode(false)"
+                    >
+                        <i class="bi bi-sun"></i>
+                    </button>
+                    <button
+                        type="button"
+                        :class="{
+                            'btn btn-outline-secondary': true,
+                            active: colorMode.userPreference === true,
+                        }"
+                        @click="colorMode.setDarkMode(true)"
+                    >
+                        <i class="bi bi-moon"></i>
+                    </button>
+                </div>
             </header>
             <div class="card-body">
                 <p>Select an image or use the example</p>
