@@ -1,4 +1,4 @@
-import { createPixel } from "../Pixel";
+import { createPixel, setDestination } from "../Pixel";
 import type { Algo } from "./Algo";
 
 export const sortbwMODULO: Algo = {
@@ -9,10 +9,11 @@ export const sortbwMODULO: Algo = {
             return [].map
                 .bind(new Uint32Array(d.data.buffer))(function (a, b) {
                     if (bool) {
-                        const pix = createPixel();
-                        pix.x = (state.WIDTH - d.width) / 2 + (b % d.width);
-                        pix.y = (state.HEIGHT - d.height) / 2 + ~~(b / d.width);
-                        pix.value = a;
+                        const pix = createPixel({
+                            x: (state.WIDTH - d.width) / 2 + (b % d.width),
+                            y: (state.HEIGHT - d.height) / 2 + ~~(b / d.width),
+                            value: a,
+                        });
                         renderTable.push(pix);
                     }
                     return [b, (d.data[b * 4 + 0] + d.data[b * 4 + 1] + d.data[b * 4 + 2]) / 3];
@@ -36,8 +37,10 @@ export const sortbwMODULO: Algo = {
         ) {
             const rT = renderTable[sortArray1[i]];
             const nRT = sortArray2[(~~(sortArray2.length / 2) + i) % sortArray2.length];
-            rT.gx = (state.WIDTH - img2w) / 2 + (nRT % img2w);
-            rT.gy = (state.HEIGHT - img2h) / 2 + ~~(nRT / img2w);
+            setDestination(rT, {
+                x: (state.WIDTH - img2w) / 2 + (nRT % img2w),
+                y: (state.HEIGHT - img2h) / 2 + ~~(nRT / img2w),
+            });
         }
     },
 };

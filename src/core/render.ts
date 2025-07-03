@@ -22,7 +22,9 @@ export function renderInternal(
     let tcnt = 0;
     for (let i = 0, arr = renderTable, len = arr.length, a; i < len; ++i) {
         a = arr[i];
-        if (bool) updatePixel(a);
+        if (bool) {
+            updatePixel(a);
+        }
         buf32[~~a.y * WIDTH + ~~a.x] = a.value;
         if (a.done) tcnt++;
     }

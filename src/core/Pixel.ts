@@ -1,57 +1,76 @@
 export interface Pixel {
+    /**
+     * The color as a Uint32
+     */
     value: number;
+    /**
+     * current x coordinate
+     */
     x: number;
+    /**
+     * current y coordinate
+     */
     y: number;
+    /**
+     * destination x coordinate
+     */
     gx: number;
+    /**
+     * destination y coordinate
+     */
     gy: number;
+    /**
+     * x speed per render in pixel
+     */
     spdx: number;
+    /**
+     * y speed per render in pixel
+     */
     spdy: number;
+    /**
+     * If the pixel is done moving
+     */
     done: boolean;
 }
 
 export function updatePixel(pxl: Pixel) {
-    const gy = pxl.gy;
-    let y = pxl.y;
-    const gx = pxl.gx;
-    let x = pxl.x;
-    let spdx = pxl.spdx;
-    let spdy = pxl.spdy;
-    let done = pxl.done;
-    const abs = Math.abs;
-    const atan2 = Math.atan2;
-    const cos = Math.cos;
-    const sin = Math.sin;
-    const rad = atan2(gy - y, gx - x);
+    const { gy, gx } = pxl;
+    let { x, y, spdx, spdy, done } = pxl;
+    const rad = Math.atan2(gy - y, gx - x);
     if (spdx === 0 && spdy === 0) done = true;
-    if (abs(x - gx) < 1) {
+    if (Math.abs(x - gx) < 1) {
         spdx = 0;
         x = gx;
     } else {
-        x += cos(rad) * spdx;
+        x += Math.cos(rad) * spdx;
     }
     if (Math.abs(y - gy) < 1) {
         spdy = 0;
         y = gy;
     } else {
-        y += sin(rad) * spdy;
+        y += Math.sin(rad) * spdy;
     }
-    pxl.gx = gx;
-    pxl.gy = gy;
     pxl.x = x;
     pxl.y = y;
     pxl.spdx = spdx;
     pxl.spdy = spdy;
-    pxl.done = done;
+    if (done) {
+        pxl.done = done;
+    }
 }
-export function createPixel(): Pixel {
+export function createPixel(initValues: Pick<Pixel, "x" | "y" | "value">): Pixel {
     return {
-        value: 0,
-        x: 0,
-        y: 0,
+        value: initValues.value,
+        x: initValues.x,
+        y: initValues.y,
         gx: 0, // goal x
         gy: 0, // goal y
         spdx: 1,
         spdy: 1,
         done: false,
     };
+}
+export function setDestination(pxl: Pixel, destination: { x: number; y: number }) {
+    pxl.gx = destination.x;
+    pxl.gy = destination.y;
 }
