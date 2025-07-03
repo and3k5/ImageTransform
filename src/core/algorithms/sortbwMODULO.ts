@@ -21,7 +21,7 @@ export const sortbwMODULO: Algo = {
                 .sort(function (a, b) {
                     return a[1] - b[1];
                 })
-                .map(function (a, b) {
+                .map(function (a) {
                     return a[0];
                 });
         }

@@ -13,7 +13,7 @@ export function prepareRender(ctx: CanvasRenderingContext2D | OffscreenCanvasRen
     const buf32 = new Uint32Array(image.data.buffer);
 
     const empty = new Int32Array(
-        [].map.bind(buf32)(function (a, b) {
+        [].map.bind(buf32)(function () {
             return -16777216;
         }),
     );
