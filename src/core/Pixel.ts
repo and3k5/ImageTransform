@@ -4,6 +4,14 @@ export interface Pixel {
      */
     value: number;
     /**
+     * initial x coordinate
+     */
+    initx: number;
+    /**
+     * initial y coordinate
+     */
+    inity: number;
+    /**
      * current x coordinate
      */
     x: number;
@@ -19,6 +27,14 @@ export interface Pixel {
      * destination y coordinate
      */
     gy: number;
+    /**
+     * initial x speed per render in pixel
+     */
+    initspdx: number;
+    /**
+     * initial y speed per render in pixel
+     */
+    initspdy: number;
     /**
      * x speed per render in pixel
      */
@@ -61,15 +77,27 @@ export function updatePixel(pxl: Pixel) {
 export function createPixel(initValues: Pick<Pixel, "x" | "y" | "value">): Pixel {
     return {
         value: initValues.value,
+        initx: initValues.x,
         x: initValues.x,
+        inity: initValues.y,
         y: initValues.y,
         gx: 0, // goal x
         gy: 0, // goal y
+        initspdx: 1,
         spdx: 1,
+        initspdy: 1,
         spdy: 1,
         done: false,
     };
 }
+export function resetPixel(pxl: Pixel) {
+    pxl.x = pxl.initx;
+    pxl.y = pxl.inity;
+    pxl.spdx = pxl.initspdx;
+    pxl.spdy = pxl.initspdy;
+    pxl.done = false;
+}
+
 export function setDestination(pxl: Pixel, destination: { x: number; y: number }) {
     pxl.gx = destination.x;
     pxl.gy = destination.y;

@@ -15,7 +15,7 @@ const imageValue2 = ref<InputImageValue>({
     imageData: null!,
 });
 
-const canv1 = ref<HTMLCanvasElement>();
+const canvasContainer = ref<HTMLDivElement>();
 
 const algorithms = ref<HTMLSelectElement>();
 
@@ -30,9 +30,18 @@ onMounted(() => {
 });
 
 function startConvert() {
+    if (canvasContainer.value == null) throw new Error("canvasContainer is missing");
+    const canv1 = document.createElement("canvas");
+    canv1.addEventListener("click", () => {
+        CONVERTOR.render();
+    });
+    while (canvasContainer.value.children[0])
+        canvasContainer.value.removeChild(canvasContainer.value.children[0]);
+    canvasContainer.value.appendChild(canv1);
+    // <canvas id="canv1" ref="canv1" @click="CONVERTOR.render()"></canvas>
     CONVERTOR.CONVERT(
         algorithms.value!.value,
-        canv1.value!,
+        canv1,
         imageValue1.value.imageData,
         imageValue2.value.imageData,
     );
@@ -80,7 +89,7 @@ function startConvert() {
                                 Calculate
                             </button>
                             <p class="text-center">Result</p>
-                            <canvas id="canv1" ref="canv1" @click="CONVERTOR.render()"></canvas>
+                            <div ref="canvasContainer"></div>
                         </div>
                     </div>
                 </div>

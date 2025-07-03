@@ -14,13 +14,16 @@ export function renderInternal(
     buf32: Uint32Array,
     renderTable: Pixel[],
     WIDTH: number,
-    ctx: CanvasRenderingContext2D,
+    ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
     empty: Int32Array,
     image: ImageData,
+    abortSignal?: AbortSignal,
 ) {
+    abortSignal?.throwIfAborted();
     buf32.set(empty);
     let tcnt = 0;
     for (let i = 0, arr = renderTable, len = arr.length, a; i < len; ++i) {
+        abortSignal?.throwIfAborted();
         a = arr[i];
         if (bool) {
             updatePixel(a);
@@ -29,13 +32,16 @@ export function renderInternal(
         if (a.done) tcnt++;
     }
 
+    abortSignal?.throwIfAborted();
     ctx!.putImageData(image, 0, 0);
 
     if (tcnt != renderTable.length) {
-        if (bool)
+        if (bool) {
+            abortSignal?.throwIfAborted();
             aniFrame = requestAnimationFrame(() =>
-                renderInternal(true, buf32, renderTable, WIDTH, ctx, empty, image),
+                renderInternal(true, buf32, renderTable, WIDTH, ctx, empty, image, abortSignal),
             );
+        }
     } else {
         console.log("Done");
     }
