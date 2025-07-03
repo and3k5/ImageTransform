@@ -24,12 +24,20 @@ function updateAlgo(event: Event) {
     }
 }
 
+function swapImages() {
+    const temp = imageValue1.value;
+    imageValue1.value = imageValue2.value;
+    imageValue2.value = temp;
+}
+
 const imageValue1 = ref<InputImageValue>({
     imageData: null!,
+    imgUrl: null!,
 });
 
 const imageValue2 = ref<InputImageValue>({
     imageData: null!,
+    imgUrl: null!,
 });
 
 const canvasContainer = ref<HTMLDivElement>();
@@ -116,16 +124,27 @@ function startConvert() {
                                 </option>
                             </select>
                             <div class="row">
-                                <InputImage
-                                    label="Select image 1"
-                                    v-model="imageValue1"
-                                    default-image="/default-image-1.png"
-                                ></InputImage>
-                                <InputImage
-                                    label="Select image 2"
-                                    v-model="imageValue2"
-                                    default-image="/default-image-2.png"
-                                ></InputImage>
+                                <div class="col-md-12 mb-3 text-center">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        @click="swapImages()"
+                                    >
+                                        Swap images
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <InputImage
+                                        label="Select image 1"
+                                        v-model="imageValue1"
+                                        default-image="/default-image-1.png"
+                                    ></InputImage>
+                                    <InputImage
+                                        label="Select image 2"
+                                        v-model="imageValue2"
+                                        default-image="/default-image-2.png"
+                                    ></InputImage>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6 text-center">

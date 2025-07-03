@@ -18,8 +18,6 @@ const props = defineProps({
     },
 });
 
-const imageUrl = ref(props.defaultImage);
-
 const emit = defineEmits<{
     (e: "update:modelValue", value: InputImageValue): void;
 }>();
@@ -28,8 +26,9 @@ const emit = defineEmits<{
     const imageData = await getDataFromUrl(imgUrl);
     emit("update:modelValue", {
         imageData: imageData,
+        imgUrl: imgUrl,
     });
-})(imageUrl.value);
+})(props.defaultImage);
 
 const dimage = ref<HTMLImageElement>();
 const fileupload = ref<HTMLInputElement>();
@@ -69,10 +68,10 @@ async function fileUploadChange(e: Event) {
     const file = fileupload.value!.files![0];
     if (file != undefined) {
         const imgUrl = await readFileAsDataUrl(file);
-        imageUrl.value = imgUrl;
         const imageData = await getDataFromUrl(imgUrl);
         emit("update:modelValue", {
             imageData: imageData,
+            imgUrl: imgUrl,
         });
     } else {
         console.error("Select a image from your computer");
@@ -100,10 +99,10 @@ async function dImageOnDrop(e: Event) {
     const file = e.dataTransfer!.files[0];
     if (file != undefined) {
         const imgUrl = await readFileAsDataUrl(file);
-        imageUrl.value = imgUrl;
         const imageData = await getDataFromUrl(imgUrl);
         emit("update:modelValue", {
             imageData: imageData,
+            imgUrl: imgUrl,
         });
     } else {
         console.error("Drag a image from your computer");
@@ -123,7 +122,7 @@ async function dImageOnDrop(e: Event) {
             @dragend="dImageDragStop"
             @drop="dImageOnDrop"
             alt=""
-            :src="imageUrl"
+            :src="modelValue.imgUrl"
         />
         <br />
         <label>
@@ -135,7 +134,9 @@ async function dImageOnDrop(e: Event) {
                 @change="fileUploadChange($event)"
                 accept="image/*"
             />
-            <span class="btn btn-secondary" v-if="imageUrl === defaultImage">Select file</span>
+            <span class="btn btn-secondary" v-if="modelValue.imgUrl === defaultImage"
+                >Select file</span
+            >
             <span class="btn btn-secondary" v-else>Change</span>
         </label>
     </div>
