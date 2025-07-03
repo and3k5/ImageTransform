@@ -98,7 +98,7 @@ function startConvert() {
                     <div class="row align-items-md-stretch">
                         <div class="col-md-6">
                             <select
-                                class="form-control input-lg"
+                                class="form-select form-select-lg mb-3"
                                 id="algoritms"
                                 ref="algorithms"
                             ></select>
@@ -118,7 +118,7 @@ function startConvert() {
                         <div class="col-md-6 text-center">
                             <button
                                 type="button"
-                                class="btn btn-primary form-control input-lg py-2"
+                                class="btn btn-lg btn-primary w-100 mb-3"
                                 id="btn"
                                 @click="startConvert"
                             >
