@@ -6,4 +6,5 @@ export interface Convertor {
         imageData2: ImageData,
     ): void;
     render(): void;
+    stopConvert(): void;
 }

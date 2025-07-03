@@ -1,5 +1,6 @@
 import type { Algo } from "./algorithms/Algo";
 import type { Pixel } from "./Pixel";
+import type { ProgressReporter } from "./types";
 
 export function getSize(imgdata1: ImageData, imgdata2: ImageData) {
     const WIDTH = Math.max(imgdata1.width, imgdata2.width);
@@ -25,6 +26,7 @@ export function makeRenderTable(
     f: Algo["run"] | undefined,
     imgdata1: ImageData,
     imgdata2: ImageData,
+    reporter?: ProgressReporter,
 ) {
     const renderTable: Pixel[] = [];
 
@@ -32,10 +34,16 @@ export function makeRenderTable(
 
     if (f != undefined) {
         const before = performance.now();
-        f(imgdata1, imgdata2, renderTable, {
-            WIDTH: WIDTH,
-            HEIGHT: HEIGHT,
-        });
+        f(
+            imgdata1,
+            imgdata2,
+            renderTable,
+            {
+                WIDTH: WIDTH,
+                HEIGHT: HEIGHT,
+            },
+            reporter,
+        );
         const after = performance.now();
         console.log("Calculation took %f ms", Math.round((after - before) * 10) / 10); // Math.round = avoid float f*ckups
     }

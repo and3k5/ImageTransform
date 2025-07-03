@@ -5,8 +5,21 @@ import { type InputImageValue } from "./types/InputImageValue";
 import { algos } from "./core/algorithms";
 import { createConvertor } from "./core/it";
 import { useColorMode } from "./color-mode-store";
+import { useConverterState } from "./core/converter-state";
 
-const CONVERTOR = createConvertor();
+const progress = ref<number>();
+
+const converterState = useConverterState();
+
+const CONVERTOR = createConvertor((n) => {
+    if (n != null) {
+        if (progress.value != Math.round(n * 1000) / 1000) {
+            progress.value = Math.round(n * 1000) / 1000;
+        }
+    } else {
+        progress.value = n;
+    }
+});
 
 const imageValue1 = ref<InputImageValue>({
     imageData: null!,
@@ -117,6 +130,15 @@ function startConvert() {
                         </div>
                         <div class="col-md-6 text-center">
                             <button
+                                v-if="converterState.inProgress"
+                                type="button"
+                                class="btn btn-lg btn-danger w-100 mb-3"
+                                @click="CONVERTOR.stopConvert()"
+                            >
+                                Stop
+                            </button>
+                            <button
+                                v-else
                                 type="button"
                                 class="btn btn-lg btn-primary w-100 mb-3"
                                 id="btn"
@@ -124,6 +146,14 @@ function startConvert() {
                             >
                                 Calculate
                             </button>
+                            <progress
+                                v-if="progress != null"
+                                class="w-100"
+                                style="height: 2em"
+                                min="0"
+                                max="1"
+                                :value="progress"
+                            ></progress>
                             <p class="text-center">Result</p>
                             <div ref="canvasContainer"></div>
                         </div>

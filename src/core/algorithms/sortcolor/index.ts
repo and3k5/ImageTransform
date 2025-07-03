@@ -19,7 +19,8 @@ import { getHSLFromUint8ArrayPart, imageDataToRenderTable } from "../commons";
 export const sortcolor: Algo = {
     name: "Sort by color",
     id: "sortcolor",
-    run: function (imgdata1, imgdata2, renderTable, state) {
+    run: function (imgdata1, imgdata2, renderTable, state, progressReporter) {
+        if (progressReporter) progressReporter(0);
         imageDataToRenderTable(imgdata1, state, renderTable);
         const indexAndHue1 = getIndexAndHue(imgdata1);
         const indexAndHue2 = getIndexAndHue(imgdata2);
@@ -28,6 +29,7 @@ export const sortcolor: Algo = {
         const img2w = imgdata2.width;
         const img2h = imgdata2.height;
         for (let i = 0; i < len; i++) {
+            if (progressReporter) progressReporter(i / len);
             const iH1 = indexAndHue1[0];
             const rT = renderTable[i];
             const iH2 = indexAndHue2.reduce(
@@ -55,5 +57,6 @@ export const sortcolor: Algo = {
         }
 
         console.log(indexAndHue2);
+        if (progressReporter) progressReporter(1);
     },
 };

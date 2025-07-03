@@ -11,6 +11,15 @@ let image: ImageData | null = null;
 let ctx: OffscreenCanvasRenderingContext2D | null = null;
 let signalController: AbortController | null = null;
 
+let lastSend: DOMHighResTimeStamp | undefined;
+
+function postProgress(v: number | undefined, forced = false) {
+    if (forced || lastSend == null || lastSend + 1000 < performance.now()) {
+        postMessage({ action: "progress", progress: v });
+        lastSend = performance.now();
+    }
+}
+
 addEventListener("message", (e) => {
     console.log("msg");
     if (e.data.action === "set-data") {
@@ -38,9 +47,13 @@ addEventListener("message", (e) => {
         const imgdata2 = ctx.createImageData(imgdata2width, imgdata2height);
         imgdata2.data.set(new Uint8ClampedArray(imgdata2buffer));
 
-        renderTable = makeRenderTable(f, imgdata1, imgdata2);
+        postProgress(0);
+
+        renderTable = makeRenderTable(f, imgdata1, imgdata2, postProgress);
 
         renderInternal(false, buf32, renderTable, canvas.width, ctx!, empty, image);
+
+        postProgress(undefined, true);
     } else if (e.data.action === "start") {
         if (canvas == null) throw new Error("missing canvas");
         if (image == null) throw new Error("missing image");

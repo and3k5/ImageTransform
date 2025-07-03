@@ -1,9 +1,12 @@
 import type { Convertor } from "./convertor";
 import { resetAnimation } from "./render";
 import { getSize } from "./prepare-rendering";
+import type { ProgressReporter } from "./types";
+import { useConverterState } from "./converter-state";
 
-export function createConvertor(): Convertor {
+export function createConvertor(progressReporter?: ProgressReporter): Convertor {
     let renderWorker: Worker | undefined;
+    const converterState = useConverterState();
 
     function CONV(
         algoid: string,
@@ -11,10 +14,28 @@ export function createConvertor(): Convertor {
         imgdata1: ImageData,
         imgdata2: ImageData,
     ) {
+        if (converterState.inProgress) {
+            throw new Error("Cannot start");
+        }
         if (renderWorker != null) {
             renderWorker.terminate();
         }
+        converterState.inProgress = true;
         renderWorker = new Worker(new URL("./worker.ts", import.meta.url), { type: "module" });
+        renderWorker.addEventListener("message", (ev) => {
+            if (ev.data.action === "progress") {
+                if (progressReporter) {
+                    progressReporter(ev.data.progress);
+                }
+                if (ev.data.progress === undefined) {
+                    converterState.inProgress = false;
+                } else {
+                    console.log(ev.data.progress);
+                }
+            } else {
+                throw new Error("Unhandled content from worker");
+            }
+        });
         resetAnimation();
 
         const { WIDTH, HEIGHT } = getSize(imgdata1, imgdata2);
@@ -50,6 +71,11 @@ export function createConvertor(): Convertor {
         render() {
             if (renderWorker == null) throw new Error("missing renderWorker");
             renderWorker.postMessage({ action: "start" });
+        },
+        stopConvert() {
+            if (renderWorker == null) throw new Error("no renderWorker");
+            renderWorker.terminate();
+            converterState.inProgress = false;
         },
     };
 }
