@@ -47,7 +47,7 @@ export const sortcolor: Algo = {
             );
             if (iH2 == null) throw new Error("didnt find pixel to match");
             indexAndHue2.splice(indexAndHue2.indexOf(iH2), 1);
-            const nRT = iH2[1];
+            const nRT = iH2[0];
             setDestination(rT, {
                 x: (state.WIDTH - img2w) / 2 + (nRT % img2w),
                 y: (state.HEIGHT - img2h) / 2 + ~~(nRT / img2w),
