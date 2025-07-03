@@ -28,25 +28,35 @@ export const sortcolor: Algo = {
         const len = renderTable.length;
         const img2w = imgdata2.width;
         const img2h = imgdata2.height;
+
+        const hueMap = new Map<number, IndexAndHue[]>();
+        for (const ih of indexAndHue2) {
+            const h = ih[1];
+            if (!hueMap.has(h)) hueMap.set(h, []);
+            hueMap.get(h)!.push(ih);
+        }
+
         for (let i = 0; i < len; i++) {
             if (progressReporter) progressReporter(i / len);
             const iH1 = indexAndHue1[0];
             const rT = renderTable[i];
-            const iH2 = indexAndHue2.reduce(
-                (prev, curr) => {
-                    if (prev === undefined) {
-                        return curr;
-                    }
-                    if (
-                        Math.abs(angleDifference(prev[1], iH1[1])) >
-                        Math.abs(angleDifference(curr[1], iH1[1]))
-                    ) {
-                        return curr;
-                    }
-                    return prev;
-                },
-                undefined as undefined | IndexAndHue,
-            );
+
+            // Find closest hue by linear scan of keys (much fewer than full array)
+            let minDiff = Infinity;
+            let closestHue: number | null = null;
+            for (const h of hueMap.keys()) {
+                const diff = Math.abs(angleDifference(h, iH1[1]));
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestHue = h;
+                }
+            }
+            let iH2: IndexAndHue | undefined = undefined;
+            if (closestHue !== null) {
+                const arr = hueMap.get(closestHue)!;
+                iH2 = arr.shift();
+                if (arr.length === 0) hueMap.delete(closestHue);
+            }
             if (iH2 == null) throw new Error("didnt find pixel to match");
             indexAndHue2.splice(indexAndHue2.indexOf(iH2), 1);
             const nRT = iH2[0];
