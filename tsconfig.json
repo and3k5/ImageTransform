@@ -1,5 +1,8 @@
 {
   "files": [],
+  "compilerOptions": {
+      "target": "es2018"
+  },
   "references": [
     {
       "path": "./tsconfig.node.json"
