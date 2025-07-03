@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import InputImage from "./components/InputImage.vue";
 import { type InputImageValue } from "./types/InputImageValue";
 import { algos } from "./core/algorithms";
 import { createConvertor } from "./core/it";
 import { useColorMode } from "./color-mode-store";
 import { useConverterState } from "./core/converter-state";
+import { useRouter } from "vue-router";
 
 const progress = ref<number>();
 
@@ -21,6 +22,21 @@ const CONVERTOR = createConvertor((n) => {
     }
 });
 
+const props = defineProps<{
+    algoid: string;
+}>();
+
+const router = useRouter();
+
+function updateAlgo(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    if (target.value === "") {
+        router.push({ query: { algoid: undefined } });
+    } else {
+        router.push({ query: { algoid: target.value } });
+    }
+}
+
 const imageValue1 = ref<InputImageValue>({
     imageData: null!,
 });
@@ -31,18 +47,7 @@ const imageValue2 = ref<InputImageValue>({
 
 const canvasContainer = ref<HTMLDivElement>();
 
-const algorithms = ref<HTMLSelectElement>();
 const colorMode = useColorMode();
-
-onMounted(() => {
-    algos.forEach(function (algo) {
-        const option = new Option();
-        option.value = algo.id;
-        option.textContent = algo.name;
-        //console.log("Added algo: " + algo.name);
-        algorithms.value!.add(option);
-    });
-});
 
 function startConvert() {
     if (canvasContainer.value == null) throw new Error("canvasContainer is missing");
@@ -54,8 +59,11 @@ function startConvert() {
         canvasContainer.value.removeChild(canvasContainer.value.children[0]);
     canvasContainer.value.appendChild(canv1);
     // <canvas id="canv1" ref="canv1" @click="CONVERTOR.render()"></canvas>
+    if (props.algoid == null) {
+        throw new Error("Algorithm ID is missing");
+    }
     CONVERTOR.CONVERT(
-        algorithms.value!.value,
+        props.algoid,
         canv1,
         imageValue1.value.imageData,
         imageValue2.value.imageData,
@@ -113,8 +121,13 @@ function startConvert() {
                             <select
                                 class="form-select form-select-lg mb-3"
                                 id="algoritms"
-                                ref="algorithms"
-                            ></select>
+                                :value="algoid"
+                                @input="updateAlgo($event)"
+                            >
+                                <option v-for="algo in algos" :value="algo.id" :key="algo.id">
+                                    {{ algo.name }}
+                                </option>
+                            </select>
                             <div class="row">
                                 <InputImage
                                     label="Select image 1"
