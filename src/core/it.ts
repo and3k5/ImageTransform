@@ -48,7 +48,7 @@ export function createConvertor(): Convertor {
     return {
         CONVERT: CONV,
         render() {
-            //renderInternal(true, buf32, renderTable, WIDTH, ctx!, empty, image);
+            if (renderWorker == null) throw new Error("missing renderWorker");
             renderWorker.postMessage({ action: "start" });
         },
     };
