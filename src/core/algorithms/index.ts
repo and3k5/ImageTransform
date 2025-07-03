@@ -3,4 +3,6 @@ import { sortbwINVERT } from "./sortbw/inverted";
 import { sortbwMODULO } from "./sortbw/modulo-mess";
 import { sortcolor } from "./sortcolor";
 
+export const defaultAlgoId = sortbw.id;
+
 export const algos = [sortbw, sortbwINVERT, sortbwMODULO, sortcolor];
