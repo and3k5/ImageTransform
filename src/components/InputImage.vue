@@ -92,7 +92,7 @@ async function fileUploadChange(e: Event) {
 // }
 
 async function dImageOnDrop(e: Event) {
-    if (!(e instanceof InputEvent)) throw new Error("Wrong type of event");
+    if (!(e instanceof DragEvent)) throw new Error("Wrong type of event");
     dimage.value!.classList.remove("drophover");
     e.preventDefault();
 
